@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import  EmployeeService  from '../services/EmployeeService'
 import  ListAddresses  from './ListAddresses'
+import DeleteIcon from '../images/delete-trash.png';
 
 export const ListAddressContext = React.createContext()
 
@@ -12,7 +13,8 @@ const Address = () => {
     console.log("1. employeeId: " + id);
 
     const [result, SetResult] =  useState()
-
+    const[addresList, setAddressList] = useState(null);
+    
     const [address, setAddress] = useState({
         orderId: "",
         empId: id,
@@ -55,6 +57,44 @@ const Address = () => {
             })
         }
     } // End of setAddressLocally()
+
+    const handleDeleteAddress = (e, orderId, empId) => {
+        e.preventDefault(e);
+        // Delete the specifichandleDeleteAddress address
+        EmployeeService.deleteAddress(orderId).then((response) => {
+            SetResult("Succesfully sent the Address for saving!")
+            console.log("EmployeeService deleted the address");
+            // navigate("/employeeList"); // TODO: its a good idea to bring it back to Employee Linpm startst!
+            if(loading) setLoading(false)
+            else setLoading(true)
+            SetResult("Deleted the address succesfully")
+            navigate("/address/" + empId); // reload the Add Address page..
+        })
+        .catch((error) => {
+            let statusCode = "000";
+            let errorMessage = "Unknown error occured";
+
+            // forward to an error page!!
+            if(error.response){
+                statusCode = error.response.status;
+                errorMessage = error.message;
+                console.log("deleteAddress() Status code = " + error.response.status);
+                console.log('deleteAddress() Error:', errorMessage);
+                console.log('deleteAddress() Error:', error);
+                
+            } else if(error.request){
+            // The request was made but no response was received
+                console.log('deleteAddress(): No response received');
+                } else {
+                // Something happened in setting up the request that triggered an Error
+                console.log('Error:', error.message);
+                
+            }
+            const errorUrl = `/ErrorPage/${statusCode}?message=${encodeURIComponent(errorMessage)}`;
+            navigate(errorUrl);
+        })
+        // navigate("/address/" + empId); // reload the Add Address page..
+    } // End of handleDeleteAddress()...
 
     const handleChange = (e) => {
         const value = e.target.value;
@@ -131,11 +171,11 @@ const Address = () => {
             defaultAddress:false
         });
     };
-
-    const[addresList, setAddressList] = useState(null);
-
+    const[loading, setLoading] = useState(true);
     useEffect(() => {
+        console.log("inside useEffect()..")
         const fetchData = async () => {
+            //setLoading(true);
             try {
               const response = await EmployeeService.getAllAddressByEmpID(id);
            console.log("response = EmployeeService.getAllAddressByEmpID(id) " + response.data)
@@ -143,9 +183,11 @@ const Address = () => {
           } catch (error) {
               console.log(error);
           }
+          //setLoading(false);
         };
         fetchData();
-    }, []);
+    }, [loading]);
+    // use the variable 'loading' to reload when address is deleted.
 
     return (
         <>
@@ -161,6 +203,10 @@ const Address = () => {
                 id={localAddress.orderId} key={localAddress.orderId} name="address" value={localAddress.orderId}> 
                         {localAddress.street}  - {localAddress.city} - {localAddress.state} - {localAddress.zip}             
                         </a>
+
+                        <img src={DeleteIcon} alt="Delete Address"  width='20px' height='5px' 
+                            onClick={(e) => handleDeleteAddress(e, localAddress.orderId, localAddress.empId)}
+                        className="hover:cursor-pointer" />
                     </div>
                 ))}
                 </fieldset>
@@ -227,9 +273,9 @@ const Address = () => {
     <tr>
     <td> </td>
       <td>  <button onClick={saveAddress} className="rounded 
-                text-white font-semibold bg-blue-400 hover:bg-blue-700 py-1 px-6">Save</button> &nbsp; &nbsp;
+                text-white font-semibold bg-blue-500 hover:bg-blue-700 py-1 px-6">Save</button> &nbsp; &nbsp;
             <button onClick={reset} className="rounded
-             text-white font-semibold bg-gray-400 hover:bg-gray-700 py-1 px-6">Clear</button>
+             text-white font-semibold bg-gray-500 hover:bg-gray-700 py-1 px-6">Clear</button>
     </td>
       </tr>
       <tr>

@@ -52,5 +52,12 @@ class EmployeeService{
         console.log("Calling: GET on" + EMPLOYEE_ADDRESS_BASE_URL + "/address/" + id);
         return axios.get(EMPLOYEE_ADDRESS_BASE_URL + "/address/" + id , config);
     }
+
+    deleteAddress(id) {
+        console.log('deleteAddress @ Employee Service:' + id);
+        console.log("Calling: GET on" + EMPLOYEE_ADDRESS_BASE_URL + "/address/delete/" + id);
+        return axios.delete(EMPLOYEE_ADDRESS_BASE_URL + "/address/delete/" + id, config);
+    }
+
 }
 export default new EmployeeService();
