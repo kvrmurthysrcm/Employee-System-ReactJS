@@ -192,10 +192,10 @@ const Address = () => {
     return (
         <>
         {addresList !== null && (
-            <div className="bg-white">
-            <div className=" max-w-2xl mx-auto shadow border-b">
+            <div>
+            <div className=" max-w-2xl mx-auto">
                 <fieldset class='p-3 border border-black'>
-                <legend>Saved addresses:</legend>
+                <legend><div className="bg-white text-xl"> Saved addresses</div></legend>
                 {addresList.map((localAddress) => ( 
                     <div className="flex max-w-2xl mx-auto shadow border-b">
                         <a onClick={(e) => handleAddressChange(e, localAddress.orderId)} 
@@ -214,9 +214,9 @@ const Address = () => {
             </div> 
         )}
 
-<div className=" max-w-2xl mx-auto shadow border-b">
+<div className=" max-w-2xl mx-auto ">
 <fieldset class='p-3 border border-black'>
-<legend>Add new address:</legend>
+<legend><div className="bg-white  text-xl"> Add new address</div></legend>
 
 <table class="table-auto">
   <thead>
