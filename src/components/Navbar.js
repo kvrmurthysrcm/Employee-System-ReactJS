@@ -13,7 +13,7 @@ const Navbar = () => {
             <div className="h-16 px-8 flex items-center">
                 <div className="font-bold text-red-200"> Employee Management System</div>
                 <div className="h-16 px-8 flex items-center text-red-200 " >
-                    <a href="/">Home</a> </div>
+                    <a style={{ cursor: 'pointer' }} onClick={() => navigate("/")}>Home</a> </div>
                 <div className="h-16 px-8 flex items-center text-red-200">
                     <a style={{ cursor: 'pointer' }} onClick={() => navigate("/PedroChart")}>Charts</a> 
                 </div>

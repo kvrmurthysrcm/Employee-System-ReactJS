@@ -7,6 +7,7 @@ import FocusInput from './FocusInput'
 import HookTimer from './HookTimer'
 import DocTitleOne from './DocTitleOne'
 import CounterTwo from './CounterTwo'
+import TestReactAPI from './TestReactAPI'
 
 const initialState = 0;
 const reducer = (state, action) => {
@@ -53,6 +54,8 @@ const TestPage = () => {
         
         <DocTitleOne/>
         <CounterTwo/>
+
+        <TestReactAPI/>
         </>
     )
 }

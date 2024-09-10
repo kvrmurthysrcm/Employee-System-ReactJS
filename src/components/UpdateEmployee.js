@@ -7,6 +7,7 @@ const UpdateEmployee = () => {
     console.log("useParams: id= " + id);
 
     const navigate = useNavigate();
+    const [defautLoad, setDefaultLoad] = useState(true)
 
     const [employee, setEmployee] = useState({
         id: id,
@@ -23,7 +24,7 @@ const UpdateEmployee = () => {
     };
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchData = async () => { 
             try {
               const response = await EmployeeService.getEmployeeById(id);
            console.log("response = EmployeeService.getEmployeeById(id) ")
@@ -33,7 +34,7 @@ const UpdateEmployee = () => {
           }
         };
         fetchData();
-    }, []);
+    },[defautLoad]);
 
     const updateEmployee = (e) => {
         e.preventDefault();

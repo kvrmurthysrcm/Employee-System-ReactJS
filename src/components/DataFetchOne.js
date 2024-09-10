@@ -6,8 +6,11 @@ function DataFetchOne() {
     const [error, setError] = useState('')
     const [post, setPost] = useState({})
 
+    const URL = "http://localhost:8000/users";
+    // const URL = "https://jsonplaceholder.typicode.com/posts/1";
+
     useEffect(() => {
-        axios.get('https://jsonplaceholder.typicode.com/posts/1')
+        axios.get(URL)
             .then(response => {
                 setLoading(false)
                 setPost(response.data)
@@ -22,7 +25,10 @@ function DataFetchOne() {
 
     return (
         <div> <b>Using useEffecct() now:</b>
-            { loading ? 'Loading' : 'Title: ' + post.title }
+        <p><b>Using URL: {URL}</b></p>
+
+            { loading ? 'Loading' : '<b>Response from API: </b>' + JSON.stringify(post) }
+            <p>...</p>
             { error ? error : null}
         </div>
     )
