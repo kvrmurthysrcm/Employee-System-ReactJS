@@ -194,7 +194,7 @@ const Address = () => {
         {addresList !== null && (
             <div>
             <div className=" max-w-2xl mx-auto">
-                <fieldset class='p-3 border border-black'>
+                <fieldset className='p-3 border border-black'>
                 <legend><div className="bg-white text-xl"> Saved addresses</div></legend>
                 {addresList.map((localAddress) => ( 
                     <div className="flex max-w-2xl mx-auto shadow border-b">

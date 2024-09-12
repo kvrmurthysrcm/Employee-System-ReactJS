@@ -19,7 +19,7 @@ const PedroChart = () => {
         <>
         <div>            
             <ul>
-            <li onClick={() => setPage("home")}><a class="active" >Home</a></li>
+            <li onClick={() => setPage("home")}><a className="active" >Home</a></li>
             <li onClick={() => setPage("line")}><a >Line Graph</a></li>
             <li onClick={() => setPage("bar")}><a >Bar Chart</a></li>
             <li onClick={() => setPage("pie")}><a >Pie Chart</a></li>

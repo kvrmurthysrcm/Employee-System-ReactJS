@@ -6,8 +6,8 @@ function DataFetchOne() {
     const [error, setError] = useState('')
     const [post, setPost] = useState({})
 
-    const URL = "http://localhost:8000/users";
-    // const URL = "https://jsonplaceholder.typicode.com/posts/1";
+    // const URL = "http://localhost:8000/users";
+    const URL = "https://jsonplaceholder.typicode.com/posts/1";
 
     useEffect(() => {
         axios.get(URL)

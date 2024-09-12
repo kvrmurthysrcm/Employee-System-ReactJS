@@ -13,7 +13,6 @@ import TestPage from "./components/TestPage";
 import PublishMessage from "./components/PublishMessage";
 import Address from "./components/Address";
 
-
 export const UserNameContext = React.createContext()
 export const PasswordContext = React.createContext()
 
@@ -21,9 +20,10 @@ function App() {
 
     return (
         <UserNameContext.Provider value={'KVRM'}>
-            <PasswordContext.Provider value={'My passwd'}>
+        <PasswordContext.Provider value={'My passwd'}>
 
-        <div className="App"> <BrowserRouter>
+        <div className="App"> 
+        <BrowserRouter basename='/empui'>
         <Navbar/> 
         <Routes>
             <Route index element={<EmployeeList/>} />
@@ -33,14 +33,13 @@ function App() {
             <Route path="/editEmployee/:id" element={<UpdateEmployee/>} />
             <Route path="/address/:id" element={<Address/>} />
             
-            
             <Route path="/MyCharts" element={<MyCharts/>} />
             <Route path="/PedroChart" element={<PedroChart/>} />
             <Route path="/ErrorPage/:statusCode" element={<ErrorPage />} />
             <Route path="/TestPage" element={<TestPage />} />
             <Route path="/PublishMessage" element={<PublishMessage />} />
         </Routes>
-    </BrowserRouter></div> 
+        </BrowserRouter></div>
     </PasswordContext.Provider>
     </UserNameContext.Provider>
     );
