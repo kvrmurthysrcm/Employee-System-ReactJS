@@ -1,12 +1,39 @@
-import React, {useContext} from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import {UserNameContext, PasswordContext} from '../App'
+import EmployeeService from '../services/EmployeeService';
+import axios from 'axios';
 
 const Navbar = () => {
     const navigate = useNavigate();
     const user = useContext(UserNameContext)
     const passwd = useContext(PasswordContext)
+
+    const[token, setToken] = useState(null);
+    const[loading, setLoading] = useState(true);
+    const noChange = true;
+
+    // need to use useMemo for this const to avoid reload of token every time.
+    useEffect(() => {
+        if(sessionStorage.getItem("token") != null){
+            // console.log("111. Token in Navbar.js..." + sessionStorage.getItem("token") );
+            console.log("111. Valid Token exist in Navbar.js..."  );
+            return;
+        }
+        const fetchData = async () => {
+            setLoading(true); 
+            try{
+                // const response = 
+                EmployeeService.getToken(token, setToken)
+                //console.log("33. Token in Navbar.js..." + sessionStorage.getItem("token") );
+            } catch(error){
+                console.log("@useEffect()::Navbar:: error:: " + error);
+            }
+        };
+        fetchData();
+        console.log("44. Token in Navbar.js..." + sessionStorage.getItem("token") ); // print the TOKEN finally....
+    });
 
     return (
         <div className="bg-gray-800">

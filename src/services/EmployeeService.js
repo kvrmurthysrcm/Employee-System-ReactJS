@@ -13,11 +13,11 @@ const username = "KVRM"
 const password = "password"
 // Base64 encode the username and password
 const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64');
-// const token = "";
+
 // Create the config object with the Authorization header
 const config = {
     headers: {
-        'Authorization': `basic ${token}`,
+        'Authorization': 'Bearer ' + sessionStorage.getItem("token") ,
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Access-Control-Allow-Origin' : 'http://localhost:3000/'
@@ -40,75 +40,67 @@ const instance = axios.create(
 
 class EmployeeService{
 
-  
     saveEmployee(employee) {
         return axios.post(EMPLOYEE_API_BASE_URL + "/api/v1/employees", employee, config);
     }
 
-
     getEmployees() {
-        // Login first using :  http://localhost:9091/login
-       //const login = instance.get("http://localhost:9091/login", {username, password})
-       //         .then((response) => 
-       //         console.log("1A. login: " +  response + " : " + JSON.stringify(response))
-               // axios.get("http://localhost:9091/login", {username, password}).then((response) => 
-                //    console.log("1A. login: " +  response + " : " + JSON.stringify(response)))
-       //     )
-       //     .catch(error =>{
-        //        console.log("1A. login: " +  error)
-       //     })
-
-        // console.log("1A. login: " + login)
- // const EMP_TOKEN = axios.post(EMPLOYEE_TOKEN_URL, config)
-
-  this.getToken();
-
-// console.log("3AA. EMP_TOKEN = " + EMP_TOKEN)
+console.log("Inside getEmployees()..@EmployeeService calling getToken().............. ");
+// console.log("Inside getEmployees()..@EmployeeService Token:: " + sessionStorage.getItem("token") );
 
         //TODO: get these in app.js, set as context variable, use it in the caller component 
         // pass the HOST value as param to this methods in this class..
-        console.log("1. window.location.hostname: " + window.location.hostname)
-        console.log("2. window.location.hostname:port : " + window.location.host)
-        const employees = instance.get(EMPLOYEE_API_BASE_URL + "/api/v1/employees", {username, password})
+        //console.log("1. @EmployeeService: window.location.hostname: " + window.location.hostname)
+        //console.log("2. @EmployeeService: window.location.hostname:port : " + window.location.host)
+        const employees = axios.get(EMPLOYEE_API_BASE_URL + "/api/v1/employees", config)
         .catch(error =>{
                  console.log("2. Error occured while fetching Employees " + error)
          })
-       // console.log("EMPLOYEE_TOKEN_URL : " + EMPLOYEE_TOKEN_URL)
-
-       
-       // console.log("EMP_TOKEN : " + EMP_TOKEN);
-
         return employees;
     }
-    getToken() {
+
+    getToken(token, setToken) {
         instance.post(EMPLOYEE_API_BASE_URL + "/token", { username, password })
             .then((response) => {
-                console.log("3. tokens: " + response + " : " + JSON.stringify(response.data));
-                return response.data;
+                var localToken = response.data
+
+                if(localToken != null){
+                    console.log("3A. EmployeeService:getToken():: localToken != null " );
+                    //setToken(localToken)
+                    sessionStorage.setItem("token",localToken)
+                } else {
+                    setToken("Token not found !!!")
+                }
+                //console.log("3A. EmployeeService:getToken():: localToken: " + localToken);
+                 return localToken;
             })
-            .catch(error => {
-                console.log("3. Error occured while fetching TOKEN ");
+            .catch(error => {  
+                console.log("3. EmployeeService:getToken():: Error occured while fetching TOKEN " + error);
             });
     }
 
     deleteEmployee(id) {
+        //console.log("Inside deleteEmployee()..@EmployeeService Token:: " + sessionStorage.getItem("token") );
         return axios.delete(EMPLOYEE_API_BASE_URL + "/api/v1/employees/" + id, config);
     }
     getEmployeeById(id) {
         console.log("Inside EmployeeService.getEmployeeById");
+       // console.log("Inside getEmployeeById()..@EmployeeService Token:: " + sessionStorage.getItem("token") );
         return axios.get(EMPLOYEE_API_BASE_URL + "/api/v1/employees/" + id, config);
     }
     updateEmployee(employee, id) {
+       // console.log("Inside updateEmployee()..@EmployeeService Token:: " + sessionStorage.getItem("token") );
         return axios.put(EMPLOYEE_API_BASE_URL + "/api/v1/employees/" + id, employee, config);
     }
 
     publishSQSMessage(message) {
         console.log('publishSQSMessage @ Employee Service:' + message);
-        console.log("Calling: POST on" + EMPLOYEE_MSG_BASE_URL + "/send");
+        // console.log("Calling: POST on" + EMPLOYEE_MSG_BASE_URL + "/send");
         return axios.post(EMPLOYEE_MSG_BASE_URL + "/send" , message, config);
     }
     // Get all the associated address objectes related to the specific Employee;
     getAllAddressByEmpID(id) {
+       // console.log("Inside getAllAddressByEmpID()..@EmployeeService Token:: " + sessionStorage.getItem("token") );
         console.log('getAllAddressByEmpID @ Employee Service:' + id);
         console.log("Calling: GET on" + EMPLOYEE_ADDRESS_BASE_URL + "/address/" + id);
         return axios.get(EMPLOYEE_ADDRESS_BASE_URL + "/address/" + id , config);
@@ -117,6 +109,7 @@ class EmployeeService{
     deleteAddress(id) {
         console.log('deleteAddress @ Employee Service:' + id);
         console.log("Calling: GET on" + EMPLOYEE_ADDRESS_BASE_URL + "/address/delete/" + id);
+       // console.log("Inside deleteAddress()..@EmployeeService Token:: " + sessionStorage.getItem("token") );
         return axios.delete(EMPLOYEE_ADDRESS_BASE_URL + "/address/delete/" + id, config);
     }
 
